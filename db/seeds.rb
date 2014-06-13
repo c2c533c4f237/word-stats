@@ -1,7 +1,18 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+require 'json'
+
+File.open("#{Rails.root}/data-dump/facebook-super-short.json", "r").each_line do |line|
+	blob = JSON.parse(line)
+	words = blob['title'].downcase.scan(/\w+/) + blob['review_text'].downcase.scan(/\w+/)
+	words = words.uniq
+	words.each do |token|
+		existing_word = Word.where(text: token).first
+		if existing_word
+			word = existing_word
+		else
+			word = Word.new(text: token)
+		end
+		rating_time = Ratingtime.new( rating: blob['rating'].to_f, date: Date.parse(blob['date']) )
+		word.ratingtimes << rating_time
+		word.save!
+	end
+end
