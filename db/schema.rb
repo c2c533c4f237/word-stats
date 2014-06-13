@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140613045952) do
+ActiveRecord::Schema.define(version: 20140613061827) do
 
   create_table "ratingtimes", force: true do |t|
     t.float    "rating"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20140613045952) do
     t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "ratingtimes_count", default: 0
   end
 
 end
